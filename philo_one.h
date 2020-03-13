@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ibaali1 <ibaali1@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/06 22:53:20 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/07 22:24:51 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/13 20:20:44 by ibaali1          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,21 @@
 # include <pthread.h>
 # include <stdlib.h>
 # include <sys/time.h>
-# define THINKING 0
-# define EATING 1
-# define SLEEPING 2
-# define FORK 3
-# define DIE 4
 
-typedef     struct s_info
+typedef		struct	s_philo
 {
-    int     number_of_philosophers;
-    int     time_to_die;
-    int     time_to_eat;
-    int     time_to_sleep;
-    int     number_of_times_each_philosopher_must_eat;
-}                   t_info;
+	int			nb_eat;
+	uint16_t	last_time_eat;
+}					t_philo;
 
-typedef     struct s_philo_data
-{
-    uint64_t    time;
-    int         nb_eat;
-}                   t_philo_data;
-
-int		ft_atoi(const char *str);
-char	*ft_itoa(uint64_t n);
-void	ft_strcat(char *dst, const char *src);
-void	ft_putstr_fd(char *s, int fd);
-void    msg_print(int nb_philo, int state, pthread_mutex_t message);
-uint64_t    get_time_in_milisecond(void);
+pthread_t			*philo_thread;
+pthread_mutex_t		*forks;
+pthread_mutex_t		*print_message;
+uint16_t			time_to_eat;
+uint16_t			time_to_sleep;
+uint16_t			time_to_die;
+int					number_of_philosophers;
+int					number_of_times_each_philosopher_must_eat;
+t_philo				*philo_data;
 
 #endif

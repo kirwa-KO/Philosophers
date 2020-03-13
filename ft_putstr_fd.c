@@ -6,13 +6,13 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 12:15:59 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/07 16:49:49 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/09 12:14:35 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
 	unsigned int lenght;
 
