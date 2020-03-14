@@ -6,7 +6,7 @@
 /*   By: ibaali1 <ibaali1@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 11:09:11 by ibaali1           #+#    #+#             */
-/*   Updated: 2020/03/14 13:15:48 by ibaali1          ###   ########.fr       */
+/*   Updated: 2020/03/14 13:33:07 by ibaali1          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ uint64_t			g_time;
 pthread_t			*g_thread_id;
 pthread_t			*g_die_thread_id;
 pthread_mutex_t		*g_forks;
-pthread_mutex_t		*g_message;
+pthread_mutex_t		g_message;
 
 void		msg_print(int nb_philo, int state);
 uint64_t	get_time_in_milisecond(void);

@@ -6,7 +6,7 @@
 /*   By: ibaali1 <ibaali1@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 11:09:07 by ibaali1           #+#    #+#             */
-/*   Updated: 2020/03/14 13:16:06 by ibaali1          ###   ########.fr       */
+/*   Updated: 2020/03/14 13:38:35 by ibaali1          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	init_philosopheres(int argc, char **argv, int nb_philo)
 
 int		main(int argc, char **argv)
 {
-	int		nb_philo;
 	int		i;
+	int		nb_philo;
 
 	if (argc != 6 && argc != 5)
 		return (-1);
@@ -49,12 +49,26 @@ int		main(int argc, char **argv)
 	init_philosopheres(argc, argv, nb_philo);
 	i = 0;
 	while (i++ < nb_philo)
+		pthread_mutex_init(&(g_forks[i - 1]), NULL);
+	pthread_mutex_init(&g_message, NULL);
+	i = 0;
+	while (i++ < nb_philo)
 		pthread_create(&(g_thread_id[i - 1]), NULL, (void*)philosophere,
 		&(g_philo_one[i - 1]));
 	i = 0;
 	while (i++ < nb_philo)
 		pthread_create(&(g_die_thread_id[i - 1]), NULL, (void*)die,
-		&(g_philo_one[i - 1]))
+		&(g_philo_one[i - 1]));
+	i = 0;
+	while (i++ < nb_philo)
+		pthread_join(g_thread_id[i - 1], NULL);
+	i = 0;
+	while (i++ < nb_philo)
+		pthread_join(g_thread_id[i - 1], NULL);
+	i = 0;
+	while (i++ < nb_philo)
+		pthread_mutex_destroy(&(g_forks[i - 1]));
+	pthread_mutex_destroy(&g_message);
 }
 
 void	*philosophere(void *parametre)
@@ -82,7 +96,18 @@ void	*philosophere(void *parametre)
 	return (NULL);
 }
 
-void	*die(void parametre)
+void	*die(void *parametre)
 {
-	
+	t_philo		*philo;
+
+	philo = parametre;
+	while (1)
+	{
+		if (((*philo).last_eat + (*philo).time_to_die) >
+		get_time_in_milisecond() && (*philo).state != EATING)
+		{
+			msg_print((*philo).nb_philo, DIE);
+			exit(1);
+		}
+	}
 }
