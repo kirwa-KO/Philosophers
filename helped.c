@@ -12,7 +12,7 @@
 
 #include "philo_one.h"
 
-uint64_t	get_time_in_milisecond(void)
+u_int64_t	get_time_in_milisecond(void)
 {
 	struct timeval	time;
 
@@ -27,14 +27,15 @@ void		msg_print(int nb_philo, int state)
 	int		space;
 
 	pthread_mutex_lock(&g_message);
-	str = ft_itoa(get_time_in_milisecond() - g_time);
+	//ft_printf("test nb_philo = $%d$ state = $%d$\n", nb_philo + 1, state);
+	str = ft_itoa2(get_time_in_milisecond() - g_time);
 	ft_strcat(buff, str);
 	ft_strcat(buff, " ");
 	space = 0;
-	space = 10 - ft_strlen(str);
-	while (space--)
+	space = 10 - ft_strlen1(str);
+	while (space-- > 0)
 		ft_strcat(buff, " ");
-	ft_strcat(buff, ft_itoa(nb_philo + 1));
+	ft_strcat(buff, ft_itoa2(nb_philo + 1));
 	ft_strcat(buff, " is ");
 	if (state == THINKING)
 		ft_strcat(buff, "thinking\n");
@@ -43,9 +44,15 @@ void		msg_print(int nb_philo, int state)
 	else if (state == FORK)
 		ft_strcat(buff, "has taken a fork\n");
 	else if (state == DIE)
+	{
 		ft_strcat(buff, "died\n");
+		ft_putstr_fd2(buff, 1);
+		exit(-1);
+	}
 	else if (state == SLEEPING)
 		ft_strcat(buff, "sleeping\n");
-	ft_putstr_fd(buff, 1);
+	ft_putstr_fd2(buff, 1);
+	//ft_printf("fin printf state = $%d$\n", state);
+	buff[0] = 0;
 	pthread_mutex_unlock(&g_message);
 }

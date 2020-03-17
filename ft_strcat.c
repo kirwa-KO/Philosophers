@@ -25,6 +25,5 @@ void		ft_strcat(char *dst, const char *src)
 		i++;
 	while (src[j] != '\0')
 		dst[i++] = src[j++];
-	printf("number = $%d$\n", i);
 	dst[i] = '\0';
 }

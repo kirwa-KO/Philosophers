@@ -12,7 +12,7 @@
 
 #include "philo_one.h"
 
-static int		nb_size(uint64_t n, uint64_t *nb_ten)
+static int		nb_size(u_int64_t n, u_int64_t *nb_ten)
 {
 	int		size;
 
@@ -25,11 +25,11 @@ static int		nb_size(uint64_t n, uint64_t *nb_ten)
 	return (size);
 }
 
-char			*ft_itoa(uint64_t n)
+char			*ft_itoa2(u_int64_t n)
 {
 	char		*str;
 	int			i;
-	uint64_t	nb_ten;
+	u_int64_t	nb_ten;
 	int			size;
 
 	i = 0;

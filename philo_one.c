@@ -22,17 +22,17 @@ void	init_philosopheres(int argc, char **argv, int nb_philo)
 	g_forks = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t) * nb_philo);
 	while (i < nb_philo)
 	{
-		g_philo_one[i].number_of_philosophers = ft_atoi(argv[1]);
-		g_philo_one[i].time_to_die = ft_atoi(argv[2]);
-		g_philo_one[i].time_to_eat = ft_atoi(argv[3]);
-		g_philo_one[i].tim_to_sleep = ft_atoi(argv[4]);
-		g_philo_one[i].left_fork = MIN(i, i + 1);
-		g_philo_one[i].right_fork = MAX(i, i + 1);
+		g_philo_one[i].number_of_philosophers = ft_atoi2(argv[1]);
+		g_philo_one[i].time_to_die = ft_atoi2(argv[2]);
+		g_philo_one[i].time_to_eat = ft_atoi2(argv[3]);
+		g_philo_one[i].tim_to_sleep = ft_atoi2(argv[4]);
+		g_philo_one[i].left_fork = MIN(i, (i + 1) % nb_philo);
+		g_philo_one[i].right_fork = MAX(i, (i + 1) % nb_philo);
 		g_philo_one[i].nb_eat = 0;
 		g_philo_one[i].nb_philo = i;
 		if (argc == 6)
 			g_philo_one[i].number_of_times_each_philosopher_must_eat =
-			ft_atoi(argv[5]);
+			ft_atoi2(argv[5]);
 		i++;
 	}
 }
@@ -44,7 +44,8 @@ int		main(int argc, char **argv)
 
 	if (argc != 6 && argc != 5)
 		return (-1);
-	nb_philo = ft_atoi(argv[1]);
+	g_time = get_time_in_milisecond();
+	nb_philo = ft_atoi2(argv[1]);
 	g_philo_one = (t_philo*)malloc(sizeof(t_philo) * nb_philo);
 	init_philosopheres(argc, argv, nb_philo);
 	i = 0;
@@ -88,6 +89,8 @@ void	*philosophere(void *parametre)
 		(*philo).last_eat = get_time_in_milisecond();
 		(*philo).nb_eat += 1;
 		usleep((*philo).time_to_eat * 1000);
+		pthread_mutex_unlock(&(g_forks[(*philo).left_fork]));
+		pthread_mutex_unlock(&(g_forks[(*philo).right_fork]));
 		msg_print((*philo).nb_philo, SLEEPING);
 		(*philo).state = SLEEPING;
 		usleep((*philo).tim_to_sleep * 1000);
@@ -103,11 +106,11 @@ void	*die(void *parametre)
 	philo = parametre;
 	while (1)
 	{
-		if (((*philo).last_eat + (*philo).time_to_die) >
+		// (uint64_t)(philo_data[*nb_philo].time + argument_data.time_to_die) < get_time_in_milisecond()
+		if ((u_int64_t)((*philo).last_eat + (*philo).time_to_die) <
 		get_time_in_milisecond() && (*philo).state != EATING)
 		{
 			msg_print((*philo).nb_philo, DIE);
-			exit(1);
 		}
 	}
 }

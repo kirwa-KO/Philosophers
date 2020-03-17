@@ -12,7 +12,7 @@
 
 #include "philo_one.h"
 
-int	ft_strlen(const char *s)
+int	ft_strlen1(const char *s)
 {
 	unsigned int lenght;
 
@@ -22,9 +22,9 @@ int	ft_strlen(const char *s)
 	return (lenght);
 }
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd2(char *s, int fd)
 {
 	if (s == NULL)
 		return ;
-	write(fd, s, ft_strlen(s));
+	write(fd, s, ft_strlen1(s));
 }

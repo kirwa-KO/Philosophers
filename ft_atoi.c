@@ -25,7 +25,7 @@ static	int		ft_sign(char c, int *i)
 	return (1);
 }
 
-int				ft_atoi(const char *str)
+int				ft_atoi2(const char *str)
 {
 	int		i;
 	long	res;
