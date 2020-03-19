@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 20:46:03 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/19 21:07:52 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/19 21:46:32 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	*die(void *param)
 	{
 		pthread_mutex_lock(&(philo->mutex->eat_mutex[philo->nb_philo]));
 		time = get_time_in_milisecond();
-		if (time - philo->last_eat > philo->args->time_to_die)
+		if (time - philo->last_eat > philo->args->time_to_die
+			&& philo->nb_eat >= philo->args->nb_must_eat)
 			msg_print(philo, DIE);
 		pthread_mutex_unlock(&(philo->mutex->eat_mutex[philo->nb_philo]));
 	}

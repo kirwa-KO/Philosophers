@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 11:09:11 by ibaali1           #+#    #+#             */
-/*   Updated: 2020/03/19 21:25:42 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/19 21:47:00 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef		struct	s_philo_args
 	uint64_t	time_to_die;
 	uint64_t	time_to_eat;
 	uint64_t	time_to_sleep;
-	uint64_t	nb_must_eat;
+	int			nb_must_eat;
 }					t_philo_args;
 
 typedef		struct	s_philo_mutex
