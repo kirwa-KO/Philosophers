@@ -1,0 +1,31 @@
+CC = clang
+
+FLAGS = -Wextra -Wall -Werror
+
+SRC = 	ft_atoi.c 				\
+		ft_itoa.c				\
+		ft_putstr_fd.c			\
+		ft_strcat.c				\
+		helped.c				\
+		philo_two.c				\
+		thread_manipulation.c
+
+NAME = philo_two
+
+LIBRARY = -pthread
+
+all: $(NAME)
+
+$(NAME) :
+	$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
+
+clean:
+	rm -rf $(NAME)
+
+fclean: clean
+
+re: fclean all
+
+.PHONY: re all fclean clean
+
+
