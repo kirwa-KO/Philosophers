@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 20:46:03 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/20 12:21:59 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/22 15:33:10 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	*die(void *param)
 	{
 		sem_wait(philo->sem->eat_sem[philo->nb_philo]);
 		time = get_time_in_milisecond();
-		if (time - philo->last_eat > philo->args->time_to_die
+		if (time - philo->last_eat > philo->args->time_to_die +
+		philo->args->time_to_sleep
 			&& philo->nb_eat >= philo->args->nb_must_eat)
 			msg_print(philo, DIE);
 		sem_post(philo->sem->eat_sem[philo->nb_philo]);

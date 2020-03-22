@@ -6,18 +6,11 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 20:46:03 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/20 20:46:33 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/22 15:31:24 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
-
-void	debug(t_philo_three *philo, char *str)
-{
-	sem_wait(philo->sem->print_sem);
-	ft_printf("%s\n", str);
-	sem_post(philo->sem->print_sem);
-}
 
 void	*die(void *param)
 {
@@ -29,25 +22,19 @@ void	*die(void *param)
 	{
 		sem_wait(philo->sem->eat_sem[philo->nb_philo]);
 		time = get_time_in_milisecond();
-		if (time - philo->last_eat > philo->args->time_to_die
-			&& philo->nb_eat >= philo->args->nb_must_eat)
-				msg_print(philo, DIE);
-		debug(philo, "I am Here..!\n");
+		if (time - philo->last_eat > philo->args->time_to_die +
+		philo->args->time_to_sleep &&
+		philo->nb_eat >= philo->args->nb_must_eat)
+			msg_print(philo, DIE);
 		sem_post(philo->sem->eat_sem[philo->nb_philo]);
-		usleep(8 * 1000);
 	}
 	return (NULL);
 }
 
 void	*philosophere(t_philo_three *philo)
 {
-	pthread_t	monitor;
-
-	if (pthread_create(&monitor, NULL, die, &(philo)))
-	{
-		debug(philo, "Problem is Here");
+	if (pthread_create(&(philo->die), NULL, die, &(*philo)))
 		return (NULL);
-	}
 	while (1)
 	{
 		msg_print(philo, THINKING);
@@ -69,18 +56,24 @@ void	*philosophere(t_philo_three *philo)
 	return (NULL);
 }
 
-int		wait_child_process(t_philo_three *philo)
+int		wait_child_process(t_philo_three *philo, int flag)
 {
 	int		i;
 
-	i = -1;
-	while (++i < philo->args->nb_of_philo)
-		if (waitpid(philo[i].pid, NULL, 1) == -1)
-			return (write(1, "Waitpid Error..!\n", 17) * 0 - 1);
-	i = -1;
-	while (++i < philo->args->nb_of_philo)
-		if ((kill(philo[i].pid, SIGINT)) == -1)
-			return (write(1, "kill Error..!\n", 17) * 0 - 1);
+	if (flag == 1)
+	{
+		i = -1;
+		while (++i < philo->args->nb_of_philo)
+			if (waitpid(-1, NULL, 0) == -1)
+				return (write(1, "Waitpid Error..!\n", 17) * 0 - 1);
+	}
+	else if (flag == 0)
+	{
+		i = -1;
+		while (++i < philo->args->nb_of_philo)
+			if ((kill(philo[i].pid, SIGINT)) == -1)
+				return (write(1, "kill Error..!\n", 17) * 0 - 1);
+	}
 	free_all_and_exit(philo);
 	exit (0);
 }
@@ -106,5 +99,6 @@ int		create_process(t_philo_args *args, t_philo_sem *sem)
 			philosophere(&(philo[i]));
 		usleep(10);
 	}
+	wait_child_process(philo, 1);
 	return (0);
 }

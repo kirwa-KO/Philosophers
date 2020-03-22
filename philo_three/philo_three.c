@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 11:09:07 by ibaali1           #+#    #+#             */
-/*   Updated: 2020/03/20 20:24:13 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/21 16:39:23 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,35 @@ int		init_philo_sem(t_philo_sem *sem, t_philo_args args)
 	return (0);
 }
 
+int		is_args__number(int argc, char **argv)
+{
+	int		i;
+	int		j;
+
+	i = 1;
+	while (i < argc)
+	{
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+				return (-1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int		main(int argc, char **argv)
 {
 	t_philo_args	args;
 	t_philo_sem	sem;
 
 	if (argc != 6 && argc != 5)
-	{
-		ft_putstr_fd2("Invalid Number of Arguments..!", 1);
-		return (-1);
-	}
+		return (write(1, "Invalid Number of Arguments..!\n", 31) * 0 - 1);
+	if (is_args__number(argc, argv) == -1)
+		return (write(1, "Invalid Arguments Type..!\n", 26) * 0 - 1);
 	g_time = get_time_in_milisecond();
 	init_philosopheres(argc, argv, &args);
 	if (init_philo_sem(&sem, args))

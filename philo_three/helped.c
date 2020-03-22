@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 16:46:37 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/20 20:44:25 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/22 15:07:31 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void		free_all_and_exit(t_philo_three *philo)
 		exit (write(1, "close semaphore Error..!\n", 25) * 0 - 1);
 	free(philo->sem->eat_sem);
 	free(philo);
-	exit(0);
 }
 
 void		msg_print(t_philo_three *philo, int state)
@@ -93,7 +92,11 @@ void		msg_print(t_philo_three *philo, int state)
 	else if (state == FORK)
 		ft_strcat(buff, "has taken a fork\n");
 	else if (state == DIE)
+	{
 		ft_strcat(buff, "died\n");
+		ft_putstr_fd2(buff, 1);
+		wait_child_process(philo, 0);
+	}
 	else if (state == SLEEPING)
 		ft_strcat(buff, "sleeping\n");
 	ft_putstr_fd2(buff, 1);

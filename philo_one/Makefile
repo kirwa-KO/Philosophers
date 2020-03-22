@@ -13,7 +13,7 @@
 CC = clang
 
 FLAGS = -Wextra -Wall -Werror
-<
+
 SRC = 	ft_atoi.c 				\
 		ft_itoa.c				\
 		ft_putstr_fd.c			\

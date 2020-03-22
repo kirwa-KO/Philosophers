@@ -6,13 +6,13 @@
 #    By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 21:31:15 by ibaali            #+#    #+#              #
-#    Updated: 2020/03/20 18:25:48 by ibaali           ###   ########.fr        #
+#    Updated: 2020/03/22 15:30:39 by ibaali           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = clang
 
-#FLAGS = -Wextra -Wall -Werror -g
+FLAGS = -Wextra -Wall -Werror -g
 FLAGS =
 
 SRC = 	ft_atoi.c 				\
@@ -29,9 +29,8 @@ LIBRARY = -pthread
 
 all: $(NAME)
 
-# you need to remove libft.a
 $(NAME) :
-	@$(CC) $(FLAGS) $(SRC) libft.a $(LIBRARY) -o $(NAME)
+	@$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
 
 clean:
 	@rm -rf $(NAME)

@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/14 11:09:11 by ibaali1           #+#    #+#             */
-/*   Updated: 2020/03/20 18:18:41 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/22 15:30:30 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include <sys/time.h>
 # include <stdint.h>
 # include <stdbool.h>
-# include "libft.h"
 # define THINKING 0
 # define EATING 1
 # define SLEEPING 2
@@ -75,5 +74,6 @@ int			ft_strlen1(const char *s);
 char		*ft_itoa2(uint64_t n);
 int			ft_atoi2(const char *str);
 void		free_all_and_exit(t_philo_three *philo);
+int			wait_child_process(t_philo_three *philo, int flag);
 
 #endif
