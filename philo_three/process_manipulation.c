@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/19 20:46:03 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/22 15:31:24 by ibaali           ###   ########.fr       */
+/*   Updated: 2020/03/22 15:44:37 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ void	*die(void *param)
 	{
 		sem_wait(philo->sem->eat_sem[philo->nb_philo]);
 		time = get_time_in_milisecond();
-		if (time - philo->last_eat > philo->args->time_to_die +
-		philo->args->time_to_sleep &&
+		if (time - philo->last_eat > philo->args->time_to_die &&
 		philo->nb_eat >= philo->args->nb_must_eat)
 			msg_print(philo, DIE);
 		sem_post(philo->sem->eat_sem[philo->nb_philo]);
+		usleep(8 * 1000);
 	}
 	return (NULL);
 }
@@ -91,10 +91,8 @@ int		create_process(t_philo_args *args, t_philo_sem *sem)
 
 		philo[i] = (t_philo_three) { .args = args, .sem = sem,
 		.last_eat = get_time_in_milisecond(), .nb_eat = 0, .nb_philo = i };
-
 		if ((philo[i].pid = fork()) == -1)
 			return (write(1, "Fork Error..!\n", 14) * 0 - 1);
-
 		else if (philo[i].pid == 0)
 			philosophere(&(philo[i]));
 		usleep(10);
