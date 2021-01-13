@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 16:46:37 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/22 15:07:31 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/01/13 12:29:23 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*put_data_before_state(char *buff, int nb_philo)
 	char	*nbr;
 	char	*str;
 
-	str = ft_itoa2(get_time_in_milisecond() - g_time);
+	str = ft_itoa2(get_time_in_milisecond());
 	ft_strcat(buff, str);
 	ft_strcat(buff, " ");
 	space = 0;
