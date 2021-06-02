@@ -6,19 +6,20 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:22:38 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 17:01:02 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 09:39:34 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int		unlink_eat_semaphores(t_all_philos_info *all_philos)
+int	unlink_eat_semaphores(t_all_philos_info *all_philos)
 {
 	int		i;
 	char	*str;
 	char	*number;
 
-	if (!(str = malloc(BUFFER_SIZE)))
+	str = malloc(BUFFER_SIZE);
+	if (!(str))
 		return (-1);
 	str[0] = 0;
 	i = -1;
@@ -36,7 +37,7 @@ int		unlink_eat_semaphores(t_all_philos_info *all_philos)
 	return (0);
 }
 
-void		free_all_and_exit(t_all_philos_info *all_philos)
+void	free_all_and_exit(t_all_philos_info *all_philos)
 {
 	int		i;
 
@@ -67,7 +68,7 @@ void	put_str(char *s)
 	write(1, s, ft_strlen(s));
 }
 
-void		msg_print(t_selected_philo *philos_and_selected_id, int state)
+void	msg_print(t_selected_philo *philos_and_selected_id, int state)
 {
 	char	*buffer;
 
@@ -103,4 +104,3 @@ uint64_t	get_time_in_milisecond(void)
 	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
-

@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 10:40:07 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 14:53:56 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 10:37:53 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	t_single_philo_info	*philo;
 	t_all_philos_info	*all_philos;
 
-	selected_philo = *((t_selected_philo*)param);
+	selected_philo = *((t_selected_philo *)param);
 	free(param);
 	all_philos = selected_philo.philos;
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
@@ -55,7 +55,6 @@ void	*eat_sleep_think_for_a_philo(void *param)
  ** and make exit
  ** make the free and exit when call msg_print functino with DIE key
 */
-
 void	*die(t_all_philos_info *philos)
 {
 	t_single_philo_info		*philo;
@@ -84,7 +83,7 @@ void	*die(t_all_philos_info *philos)
  ** initialize the philosophers variabels and run it
 */
 
-static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos)
+static int	initialize_the_thread_and_run_it(t_all_philos_info *philos)
 {
 	t_selected_philo	*selected_philo;
 	int					i;
@@ -95,11 +94,11 @@ static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos)
 		philos->philosopers[i].id = i;
 		philos->philosopers[i].last_eat = get_time_in_milisecond();
 		philos->philosopers[i].nb_eat = 0;
-		selected_philo = (t_selected_philo*)malloc(sizeof(t_selected_philo));
+		selected_philo = (t_selected_philo *)malloc(sizeof(t_selected_philo));
 		selected_philo->id_of_philo = i;
 		selected_philo->philos = philos;
-		
-		if (pthread_create(&(philos->philosopers[i].life), NULL, eat_sleep_think_for_a_philo, selected_philo))
+		if (pthread_create(&(philos->philosopers[i].life), NULL,
+				eat_sleep_think_for_a_philo, selected_philo))
 			return (-1);
 	}
 	return (0);
@@ -110,13 +109,17 @@ static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos)
  ** and check stop simulation
  ** with the die function and philos->must_eat thread
 */
-int		create_threads(t_philos_args *args, t_philos_sem *sem)
+int	create_threads(t_philos_args *args, t_philos_sem *sem)
 {
 	t_all_philos_info		*philos;
 
-	if (!(philos = (t_all_philos_info*)malloc(sizeof(t_all_philos_info) * args->nb_of_philos)))
+	philos = (t_all_philos_info *)malloc(
+			sizeof(t_all_philos_info) * args->nb_of_philos);
+	if (!philos)
 		return (-1);
-	if (!(philos->philosopers = (t_single_philo_info*)malloc(sizeof(t_single_philo_info) * args->nb_of_philos)))
+	philos->philosopers = (t_single_philo_info *)malloc(
+			sizeof(t_single_philo_info) * args->nb_of_philos);
+	if (!(philos->philosopers))
 		return (-1);
 	philos->args = args;
 	philos->sem = sem;

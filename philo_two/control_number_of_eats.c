@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 12:26:56 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 12:33:48 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 09:38:51 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
  ** check if all philos eat number of eat based of table that
  ** must_eat_controlfunction give it
 */
-
-static	void	check_eaten_philos(t_all_philos_info *philos, int *done_eating)
+static void	check_eaten_philos(t_all_philos_info *philos, int *done_eating)
 {
 	int		i;
 	int		stop_simulation;
@@ -33,21 +32,19 @@ static	void	check_eaten_philos(t_all_philos_info *philos, int *done_eating)
 	}
 }
 
-
 /*
  ** must_eat_control function responsible for stop simulation if a philos
  ** eat number of must eat
  ** it lock the eat mutex to dont kill philo when eating
 */
-
 void	*must_eat_control(void *param)
 {
 	t_all_philos_info		*philos;
 	int						*done_eating;
 	int						i;
 
-	philos = (t_all_philos_info*)param;
-	done_eating = (int*)malloc(sizeof(int) * philos->args->nb_of_philos);
+	philos = (t_all_philos_info *)param;
+	done_eating = (int *)malloc(sizeof(int) * philos->args->nb_of_philos);
 	if (!done_eating)
 		return (NULL);
 	i = -1;
