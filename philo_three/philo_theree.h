@@ -6,10 +6,9 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 14:21:48 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 17:10:13 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 11:36:06 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef PHILO_THEREE_H
 # define PHILO_THEREE_H
@@ -34,7 +33,7 @@
 # define EXIT_BY_PHILO_DIE 2
 # define EXIT_BY_FINISH_NB_EAT 3
 
-typedef		struct	s_philos_args
+typedef struct s_philos_args
 {
 	int						nb_of_philos;
 	uint64_t				time_to_die;
@@ -43,7 +42,7 @@ typedef		struct	s_philos_args
 	int						nb_must_eat;
 }					t_philos_args;
 
-typedef		struct	s_philos_sem
+typedef struct s_philos_sem
 {
 	sem_t					*forks_sem;
 	sem_t					**eat_sem;
@@ -51,7 +50,7 @@ typedef		struct	s_philos_sem
 	sem_t					*door;
 }					t_philos_sem;
 
-typedef		struct	s_single_philo_info
+typedef struct s_single_philo_info
 {
 	int						id;
 	pid_t					pid;
@@ -60,19 +59,18 @@ typedef		struct	s_single_philo_info
 	pthread_t				die;
 }					t_single_philo_info;
 
-typedef		struct	s_all_philos_info
+typedef struct s_all_philos_info
 {
 	t_philos_args			*args;
 	t_philos_sem			*sem;
 	t_single_philo_info		*philosopers;
 }					t_all_philos_info;
 
-typedef		struct	s_selected_philo
+typedef struct s_selected_philo
 {
 	int						id_of_philo;
 	t_all_philos_info		*philos;
 }					t_selected_philo;
-
 
 int							ft_strlen(char *s);
 void						put_str(char *s);
@@ -80,16 +78,18 @@ int							ft_atoi(const char *str);
 uint64_t					get_time_in_milisecond(void);
 char						*ft_itoa(uint64_t n);
 void						ft_sleep(uint64_t duration_in_mille_sec);
-void						msg_print(t_selected_philo *philos_and_selected_id, int state);
+void						msg_print(t_selected_philo *philos_and_selected_id,
+								int state);
 void						ft_strcat(char *dst, const char *src);
 void						free_all_and_exit(t_all_philos_info *all_philo);
-void						msg_print(t_selected_philo *philos_and_selected_id, int state);
-int							create_process(t_philos_args *args, t_philos_sem *sem);
+int							create_process(t_philos_args *args,
+								t_philos_sem *sem);
 int							wait_child_process(t_all_philos_info *all_philos);
 void						lock_forks_and_eat_sems(t_single_philo_info *philo,
-													t_selected_philo *selected_philo,
-													t_all_philos_info *all_philos);
-void						unlock_forks_and_eat_sems(t_single_philo_info *philo,
-														t_all_philos_info *all_philos);
+								t_selected_philo *selected_philo,
+								t_all_philos_info *all_philos);
+void						unlock_forks_and_eat_sems(
+								t_single_philo_info *philo,
+								t_all_philos_info *all_philos);
 
 #endif

@@ -6,19 +6,20 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 17:02:01 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 17:05:31 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 11:07:46 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_theree.h"
 
-int		unlink_eat_semaphores(t_all_philos_info *philo)
+int	unlink_eat_semaphores(t_all_philos_info *philo)
 {
 	int		i;
 	char	*str;
 	char	*number;
 
-	if (!(str = malloc(4096)))
+	str = malloc(BUFFER_SIZE);
+	if (!(str))
 		return (-1);
 	str[0] = 0;
 	i = -1;
@@ -36,7 +37,7 @@ int		unlink_eat_semaphores(t_all_philos_info *philo)
 	return (0);
 }
 
-void		free_all_and_exit(t_all_philos_info *all_philos)
+void	free_all_and_exit(t_all_philos_info *all_philos)
 {
 	if (sem_unlink(SEM_FORK_NAME) && sem_close(all_philos->sem->forks_sem))
 		exit (-1);
@@ -59,7 +60,7 @@ void	put_str(char *s)
 	write(1, s, ft_strlen(s));
 }
 
-void		msg_print(t_selected_philo *philos_and_selected_id, int state)
+void	msg_print(t_selected_philo *philos_and_selected_id, int state)
 {
 	char	*buffer;
 

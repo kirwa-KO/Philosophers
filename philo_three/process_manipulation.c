@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 14:31:39 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 17:11:49 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 11:43:01 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*die(void *param)
 	t_single_philo_info	*philo;
 	t_all_philos_info	*all_philos;
 
-	selected_philo = *((t_selected_philo*)param);
+	selected_philo = *((t_selected_philo *)param);
 	free(param);
 	all_philos = selected_philo.philos;
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
@@ -44,7 +44,7 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	t_single_philo_info	*philo;
 	t_all_philos_info	*all_philos;
 
-	selected_philo = *((t_selected_philo*)param);
+	selected_philo = *((t_selected_philo *)param);
 	all_philos = selected_philo.philos;
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
 	philo->id = selected_philo.id_of_philo;
@@ -65,7 +65,7 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	return (NULL);
 }
 
-int		wait_child_process(t_all_philos_info *all_philos)
+int	wait_child_process(t_all_philos_info *all_philos)
 {
 	int		philos_done_eating;
 	int		status;
@@ -94,31 +94,45 @@ int		wait_child_process(t_all_philos_info *all_philos)
 	return (0);
 }
 
-int		create_process(t_philos_args *args, t_philos_sem *sem)
+/*
+ ** initialize the philosophers variabels and run it
+*/
+static int	initialize_the_process_and_run_it(t_all_philos_info *philos)
 {
-	t_all_philos_info	*philos;
 	t_selected_philo	*selected_philo;
 	int					i;
 
-	if (!(philos = (t_all_philos_info*)malloc(sizeof(t_all_philos_info))))
-		return (-1);
-	if (!(philos->philosopers = (t_single_philo_info*)malloc(sizeof(t_single_philo_info) * args->nb_of_philos)))
-		return (-1);
-	philos->args = args;
-	philos->sem = sem;
 	i = -1;
-	while (++i < args->nb_of_philos)
+	while (++i < philos->args->nb_of_philos)
 	{
 		philos->philosopers[i].id = i;
 		philos->philosopers[i].last_eat = get_time_in_milisecond();
 		philos->philosopers[i].nb_eat = 0;
-		selected_philo = (t_selected_philo*)malloc(sizeof(t_selected_philo));
+		selected_philo = (t_selected_philo *)malloc(sizeof(t_selected_philo));
 		selected_philo->id_of_philo = i;
 		selected_philo->philos = philos;
-		if ((philos->philosopers[i].pid = fork()) == -1)
+		philos->philosopers[i].pid = fork();
+		if ((philos->philosopers[i].pid) == -1)
 			return (-1);
 		else if (philos->philosopers[i].pid == 0)
 			eat_sleep_think_for_a_philo(selected_philo);
 	}
-	return wait_child_process(philos);
+	return (0);
+}
+
+int	create_process(t_philos_args *args, t_philos_sem *sem)
+{
+	t_all_philos_info	*philos;
+
+	philos = (t_all_philos_info *)malloc(sizeof(t_all_philos_info));
+	if (!philos)
+		return (-1);
+	philos->philosopers = (t_single_philo_info *)malloc(
+			sizeof(t_single_philo_info) * args->nb_of_philos);
+	if (!(philos->philosopers))
+		return (-1);
+	philos->args = args;
+	philos->sem = sem;
+	initialize_the_process_and_run_it(philos);
+	return (wait_child_process(philos));
 }
