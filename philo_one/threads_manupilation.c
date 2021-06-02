@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:00:24 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 09:36:34 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 18:51:33 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
 	philo->id = selected_philo.id_of_philo;
 	pthread_mutex_lock(&(all_philos->mutex->door));
-	while (1)
+	while (!(all_philos->some_one_died) && (philo->nb_eat < all_philos->args->nb_must_eat || !(all_philos->args->nb_must_eat)))
 	{
 		lock_forks_and_eat_mutexs(philo, &selected_philo, all_philos);
 		philo->nb_eat += 1;
@@ -54,7 +54,7 @@ void	*eat_sleep_think_for_a_philo(void *param)
  ** and make exit
  ** make the free and exit when call msg_print functino with DIE key
 */
-void	*die(t_all_philos_info *philos)
+int	die(t_all_philos_info *philos)
 {
 	t_single_philo_info		*philo;
 	t_selected_philo		selected_philo2;
@@ -70,9 +70,14 @@ void	*die(t_all_philos_info *philos)
 			selected_philo2.id_of_philo = philo->id;
 			selected_philo2.philos = philos;
 			pthread_mutex_lock(&(philos->mutex->eat_mutex[philo->id]));
+			if (philos->philosopers[i].nb_eat >= philos->args->nb_must_eat && philos->args->nb_must_eat != 0)
+				return (PHILO_DONE_EAT);
 			time = get_time_in_milisecond();
 			if ((time - philo->last_eat) > philos->args->time_to_die)
+			{
+				philos->some_one_died = 1;
 				msg_print(&selected_philo2, DIE);
+			}
 			pthread_mutex_unlock(&(philos->mutex->eat_mutex[philo->id]));
 		}
 	}
@@ -118,6 +123,7 @@ static int	initialize_the_thread_and_run_it(t_all_philos_info *philos,
 int	create_threads(t_philos_args *args, t_philos_mutex *mutex)
 {
 	t_all_philos_info		*philos;
+	int						i;
 
 	philos = (t_all_philos_info *)malloc(sizeof(t_all_philos_info));
 	if (!philos)
@@ -128,12 +134,16 @@ int	create_threads(t_philos_args *args, t_philos_mutex *mutex)
 		return (-1);
 	philos->args = args;
 	philos->mutex = mutex;
-	if (philos->args->nb_must_eat != -1)
-		if (pthread_create(&(philos->must_eat), NULL, must_eat_control, philos))
-			return (-1);
+	philos->some_one_died = 0;
 	initialize_the_thread_and_run_it(philos, 0);
 	usleep(1000);
 	initialize_the_thread_and_run_it(philos, 1);
-	die(philos);
+	if (die(philos) == PHILO_DONE_EAT)
+	{
+		i = -1;
+		while (++i < philos->args->nb_of_philos)
+			pthread_join(philos->philosopers[i].life, NULL);
+		free_all_and_exit(philos);
+	}
 	return (0);
 }

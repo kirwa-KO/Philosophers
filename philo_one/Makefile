@@ -6,7 +6,7 @@
 #    By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/30 12:13:31 by ibaali            #+#    #+#              #
-#    Updated: 2021/06/02 09:14:30 by ibaali           ###   ########.fr        #
+#    Updated: 2021/06/02 18:07:07 by ibaali           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ LIBRARY = -pthread
 all: $(NAME)
 
 $(NAME) : $(SRC)
-	@$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
+	@#$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
+	@$(CC) $(SRC) $(LIBRARY) -o $(NAME)
 
 clean:
 	rm -rf $(NAME)

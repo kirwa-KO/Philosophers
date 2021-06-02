@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 12:13:35 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 09:29:14 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 18:22:08 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,29 @@
  ** initialize all philosophers informtion
  ** from argv and argc
 */
-static	void	init_philosopheres(int argc, char **argv, t_philos_args *args)
+static	int	init_philosopheres(int argc, char **argv, t_philos_args *args)
 {
 	args->nb_of_philos = ft_atoi(argv[1]);
+	if (args->nb_of_philos <= 0)
+		return (-1);
 	args->time_to_die = ft_atoi(argv[2]);
+	if (args->time_to_die <= 0)
+		return (-1);
 	args->time_to_eat = ft_atoi(argv[3]);
+	if (args->time_to_eat <= 0)
+		return (-1);
 	args->time_to_sleep = ft_atoi(argv[4]);
+	if (args->time_to_sleep <= 0)
+		return (-1);
 	if (argc == 6)
+	{
 		args->nb_must_eat = ft_atoi(argv[5]);
+		if (args->nb_must_eat <= 0)
+			return -1;
+	}
 	else
-		args->nb_must_eat = -1;
+		args->nb_must_eat = 0;
+	return (0);
 }
 
 /*
@@ -65,10 +78,14 @@ int	main(int argc, char **argv)
 
 	if (argc != 6 && argc != 5)
 	{
-		put_str("\033[0;31mInvalid Number of Arguments..!\033[0m\n");
+		put_str("\033[1;31mInvalid Number of Arguments..!\033[0m\n");
 		return (-1);
 	}
-	init_philosopheres(argc, argv, &args);
+	if (init_philosopheres(argc, argv, &args) == -1)
+	{
+		put_str("\033[1;31mInvalid Arguments..!\033[0m\n");
+		return (-1);
+	}
 	if (init_philo_mutex(&mutex, args))
 	{
 		put_str("\033[0;31mMalloc Error...!\033[0m\n");

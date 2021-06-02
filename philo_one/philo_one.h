@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 12:13:37 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 09:34:09 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 18:45:28 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@
 # define SLEEPING 2
 # define FORK 3
 # define DIE 4
+# define PHILO_DONE_EAT 5
 
 typedef struct s_philos_args
 {
 	int						nb_of_philos;
-	uint64_t				time_to_die;
-	uint64_t				time_to_eat;
-	uint64_t				time_to_sleep;
+	int						time_to_die;
+	int						time_to_eat;
+	int						time_to_sleep;
 	int						nb_must_eat;
 }					t_philos_args;
 
@@ -55,8 +56,9 @@ typedef struct s_all_philos_info
 {
 	t_philos_args			*args;
 	t_philos_mutex			*mutex;
-	pthread_t				must_eat;
+	// pthread_t				must_eat;
 	t_single_philo_info		*philosopers;
+	int						some_one_died;
 }					t_all_philos_info;
 
 typedef struct s_selected_philo
@@ -83,6 +85,6 @@ void						lock_forks_and_eat_mutexs(
 void						unlock_forks_and_eat_mutexs(
 								t_single_philo_info *philo,
 								t_all_philos_info *all_philos);
-void						*must_eat_control(void *param);
+// void						*must_eat_control(void *param);
 
 #endif

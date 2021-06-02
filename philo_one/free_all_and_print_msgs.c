@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:22:38 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 09:23:01 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 19:48:25 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 void	free_all_and_exit(t_all_philos_info *all_philos)
 {
-	int		i;
+	// int		i;
 
-	if (pthread_detach(all_philos->must_eat))
-		exit(-1);
-	i = -1;
-	while (++i < all_philos->args->nb_of_philos)
-		if (pthread_detach(all_philos->philosopers[i].life))
-			exit (-1);
-	i = -1;
-	while (++i < all_philos->args->nb_of_philos)
-		if (pthread_mutex_destroy(&(all_philos->mutex->forks_mutex[i])))
-			exit (-1);
-	i = -1;
-	while (++i < all_philos->args->nb_of_philos)
-		if (pthread_mutex_destroy(&(all_philos->mutex->eat_mutex[i])))
-			exit (-1);
-	if (pthread_mutex_destroy(&(all_philos->mutex->print_mutex)))
-		exit (-1);
+	// if (pthread_detach(all_philos->must_eat))
+	// 	exit(-1);
+	// i = -1;
+	// while (++i < all_philos->args->nb_of_philos)
+	// 	if (pthread_detach(all_philos->philosopers[i].life))
+	// 		exit (-1);
+	// i = -1;
+	// while (++i < all_philos->args->nb_of_philos)
+	// 	if (pthread_mutex_destroy(&(all_philos->mutex->forks_mutex[i])))
+	// 		exit (-1);
+	// i = -1;
+	// while (++i < all_philos->args->nb_of_philos)
+	// 	if (pthread_mutex_destroy(&(all_philos->mutex->eat_mutex[i])))
+	// 		exit (-1);
+	// if (pthread_mutex_destroy(&(all_philos->mutex->print_mutex)))
+	// 	exit (-1);
 	free(all_philos->mutex->forks_mutex);
 	free(all_philos->mutex->eat_mutex);
 	free(all_philos->philosopers);

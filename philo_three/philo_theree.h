@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 14:21:48 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 11:36:06 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 20:06:57 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_single_philo_info
 	pid_t					pid;
 	uint64_t				last_eat;
 	int						nb_eat;
-	pthread_t				die;
+	pthread_t				life;
 }					t_single_philo_info;
 
 typedef struct s_all_philos_info
@@ -91,5 +91,7 @@ void						lock_forks_and_eat_sems(t_single_philo_info *philo,
 void						unlock_forks_and_eat_sems(
 								t_single_philo_info *philo,
 								t_all_philos_info *all_philos);
+
+uint64_t g_time;
 
 #endif
