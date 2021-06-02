@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread_manipulation.c                              :+:      :+:    :+:   */
+/*   threads_manupilation.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/01 10:40:07 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 14:53:56 by ibaali           ###   ########.fr       */
+/*   Created: 2021/05/31 15:00:24 by ibaali            #+#    #+#             */
+/*   Updated: 2021/06/01 10:14:40 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_one.h"
 
 /*
  ** function used to make the philo take both forks
@@ -20,7 +20,6 @@
  ** first for sleep time to eat
  ** and second in time to sleep
 */
-
 void	*eat_sleep_think_for_a_philo(void *param)
 {
 	t_selected_philo	selected_philo;
@@ -32,15 +31,15 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	all_philos = selected_philo.philos;
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
 	philo->id = selected_philo.id_of_philo;
-	sem_wait(all_philos->sem->door);
+	pthread_mutex_lock(&(all_philos->mutex->door));
 	while (1)
 	{
-		lock_forks_and_eat_sems(philo, &selected_philo, all_philos);
+		lock_forks_and_eat_mutexs(philo, &selected_philo, all_philos);
 		philo->nb_eat += 1;
 		philo->last_eat = get_time_in_milisecond();
 		ft_sleep(all_philos->args->time_to_eat);
 		msg_print(&selected_philo, SLEEPING);
-		unlock_forks_and_eat_sems(philo, all_philos);
+		unlock_forks_and_eat_mutexs(philo, all_philos);
 		ft_sleep(all_philos->args->time_to_sleep);
 		msg_print(&selected_philo, THINKING);
 	}
@@ -55,11 +54,10 @@ void	*eat_sleep_think_for_a_philo(void *param)
  ** and make exit
  ** make the free and exit when call msg_print functino with DIE key
 */
-
 void	*die(t_all_philos_info *philos)
 {
 	t_single_philo_info		*philo;
-	t_selected_philo		selected_philo;
+	t_selected_philo		selected_philo2;
 	uint64_t				time;
 	int						i;
 
@@ -69,13 +67,13 @@ void	*die(t_all_philos_info *philos)
 		while (++i < philos->args->nb_of_philos)
 		{
 			philo = &(philos->philosopers[i]);
-			selected_philo.id_of_philo = philo->id;
-			selected_philo.philos = philos;
-			sem_wait(philos->sem->eat_sem[philo->id]);
+			selected_philo2.id_of_philo = philo->id;
+			selected_philo2.philos = philos;
+			pthread_mutex_lock(&(philos->mutex->eat_mutex[philo->id]));
 			time = get_time_in_milisecond();
 			if ((time - philo->last_eat) > philos->args->time_to_die)
-				msg_print(&selected_philo, DIE);
-			sem_post(philos->sem->eat_sem[philo->id]);
+				msg_print(&selected_philo2, DIE);
+			pthread_mutex_unlock(&(philos->mutex->eat_mutex[philo->id]));
 		}
 	}
 }
@@ -84,23 +82,27 @@ void	*die(t_all_philos_info *philos)
  ** initialize the philosophers variabels and run it
 */
 
-static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos)
+static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos, int start)
 {
-	t_selected_philo	*selected_philo;
-	int					i;
+	t_selected_philo		*selected_philo;
 
-	i = -1;
-	while (++i < philos->args->nb_of_philos)
+	while (start < philos->args->nb_of_philos)
 	{
-		philos->philosopers[i].id = i;
-		philos->philosopers[i].last_eat = get_time_in_milisecond();
-		philos->philosopers[i].nb_eat = 0;
+		philos->philosopers[start].id = start;
+		philos->philosopers[start].last_eat = get_time_in_milisecond();
+		philos->philosopers[start].left_fork = (start - 1) % philos->args->nb_of_philos;
+		if (philos->philosopers[start].left_fork < 0)
+			philos->philosopers[start].left_fork += philos->args->nb_of_philos;
+		philos->philosopers[start].right_fork = start;
+		philos->philosopers[start].nb_eat = 0;
 		selected_philo = (t_selected_philo*)malloc(sizeof(t_selected_philo));
-		selected_philo->id_of_philo = i;
-		selected_philo->philos = philos;
-		
-		if (pthread_create(&(philos->philosopers[i].life), NULL, eat_sleep_think_for_a_philo, selected_philo))
+		if (!selected_philo)
 			return (-1);
+		selected_philo->id_of_philo = start;
+		selected_philo->philos = philos;
+		if (pthread_create(&(philos->philosopers[start].life), NULL, eat_sleep_think_for_a_philo, selected_philo))
+			return (-1);
+		start += 2;
 	}
 	return (0);
 }
@@ -110,20 +112,25 @@ static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos)
  ** and check stop simulation
  ** with the die function and philos->must_eat thread
 */
-int		create_threads(t_philos_args *args, t_philos_sem *sem)
+
+int		create_threads(t_philos_args *args, t_philos_mutex *mutex)
 {
 	t_all_philos_info		*philos;
 
-	if (!(philos = (t_all_philos_info*)malloc(sizeof(t_all_philos_info) * args->nb_of_philos)))
+	philos = (t_all_philos_info*)malloc(sizeof(t_all_philos_info));
+	if (!philos)
 		return (-1);
-	if (!(philos->philosopers = (t_single_philo_info*)malloc(sizeof(t_single_philo_info) * args->nb_of_philos)))
+	philos->philosopers = (t_single_philo_info*)malloc(sizeof(t_single_philo_info) * args->nb_of_philos);
+	if (!(philos->philosopers))
 		return (-1);
 	philos->args = args;
-	philos->sem = sem;
+	philos->mutex = mutex;
 	if (philos->args->nb_must_eat != -1)
 		if (pthread_create(&(philos->must_eat), NULL, must_eat_control, philos))
 			return (-1);
-	initialize_the_thread_and_run_it(philos);
+	initialize_the_thread_and_run_it(philos, 0);
+	usleep(1000);
+	initialize_the_thread_and_run_it(philos, 1);
 	die(philos);
 	return (0);
 }

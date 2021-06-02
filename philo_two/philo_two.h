@@ -5,70 +5,85 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/14 11:09:11 by ibaali1           #+#    #+#             */
-/*   Updated: 2020/03/20 13:02:58 by ibaali           ###   ########.fr       */
+/*   Created: 2021/05/30 12:13:37 by ibaali            #+#    #+#             */
+/*   Updated: 2021/06/01 12:27:21 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef philo_two_H
-# define philo_two_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 # include <unistd.h>
 # include <stdio.h>
 # include <pthread.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <semaphore.h>
 # include <stdlib.h>
 # include <sys/time.h>
 # include <stdint.h>
-# include <stdbool.h>
+# include <semaphore.h>
 # define THINKING 0
 # define EATING 1
 # define SLEEPING 2
 # define FORK 3
 # define DIE 4
-# define SEM_PRINT_NAME "print semaphores"
-# define SEM_FORK_NAME "forks semaphores"
-# define SEM_EAT_NAME "sem eat number "
-# define MIN(x, y) ((x) > (y) ? (y) : (x))
-# define MAX(x, y) ((x) < (y) ? (y) : (x))
+# define SEM_PRINT_NAME "print semaphores5"
+# define SEM_FORK_NAME "forks semaphores5"
+# define SEM_EAT_NAME "sem eat number5 "
+# define SEM_DOOR_NAME "sem for door5"
+# define BUFFER_SIZE 4096
 
-typedef		struct	s_philo_args
+typedef		struct	s_philos_args
 {
-	int			nb_of_philo;
-	uint64_t	time_to_die;
-	uint64_t	time_to_eat;
-	uint64_t	time_to_sleep;
-	int			nb_must_eat;
-}					t_philo_args;
+	int						nb_of_philos;
+	uint64_t				time_to_die;
+	uint64_t				time_to_eat;
+	uint64_t				time_to_sleep;
+	int						nb_must_eat;
+}					t_philos_args;
 
-typedef		struct	s_philo_sem
+typedef		struct	s_philos_sem
 {
-	sem_t		*forks_sem;
-	sem_t		**eat_sem;
-	sem_t		*print_sem;
-}					t_philo_sem;
+	sem_t					*forks_sem;
+	sem_t					**eat_sem;
+	sem_t					*print_sem;
+	sem_t					*door;
+}					t_philos_sem;
 
-typedef		struct	s_philo_two
+typedef		struct	s_single_philo_info
 {
-	t_philo_args	*args;
-	t_philo_sem		*sem;
-	uint64_t		last_eat;
-	int				nb_eat;
-	int				nb_philo;
-	pthread_t		life;
-	pthread_t		die;
-}					t_philo_two;
+	int						id;
+	uint64_t				last_eat;
+	int						nb_eat;
+	pthread_t				life;
+}					t_single_philo_info;
 
-uint64_t	g_time;
+typedef		struct	s_all_philos_info
+{
+	t_philos_args			*args;
+	t_philos_sem			*sem;
+	pthread_t				must_eat;
+	t_single_philo_info		*philosopers;
+}					t_all_philos_info;
 
-int		create_threads(t_philo_args *args, t_philo_sem *sem);
-void		msg_print(t_philo_two *philo, int state);
-uint64_t	get_time_in_milisecond(void);
-void		ft_strcat(char *dst, const char *src);
-void		ft_putstr_fd2(char *s, int fd);
-int			ft_strlen1(const char *s);
-char		*ft_itoa2(uint64_t n);
-int			ft_atoi2(const char *str);
+typedef		struct	s_selected_philo
+{
+	int						id_of_philo;
+	t_all_philos_info		*philos;
+}					t_selected_philo;
 
+
+int							ft_strlen(char *s);
+void						put_str(char *s);
+int							ft_atoi(const char *str);
+uint64_t					get_time_in_milisecond(void);
+char						*ft_itoa(uint64_t n);
+void						ft_sleep(uint64_t duration_in_mille_sec);
+void						msg_print(t_selected_philo *philos_and_selected_id, int state);
+void						ft_strcat(char *dst, const char *src);
+int							create_threads(t_philos_args *args, t_philos_sem *sem);
+void						free_all_and_exit(t_all_philos_info *all_philos);
+void						lock_forks_and_eat_sems(t_single_philo_info *philo,
+													t_selected_philo *selected_philo,
+													t_all_philos_info *all_philos);
+void						unlock_forks_and_eat_sems(t_single_philo_info *philo,
+														t_all_philos_info *all_philos);
+void						*must_eat_control(void *param);
 #endif

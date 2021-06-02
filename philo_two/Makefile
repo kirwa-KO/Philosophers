@@ -6,7 +6,7 @@
 #    By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/20 13:27:44 by ibaali            #+#    #+#              #
-#    Updated: 2020/03/20 13:27:45 by ibaali           ###   ########.fr        #
+#    Updated: 2021/06/02 09:14:50 by ibaali           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,13 @@ CC = clang
 
 FLAGS = -Wextra -Wall -Werror
 
-SRC = 	ft_atoi.c 				\
-		ft_itoa.c				\
-		ft_putstr_fd.c			\
-		ft_strcat.c				\
-		helped.c				\
-		philo_two.c				\
-		thread_manipulation.c
+SRC = 	main.c							\
+		helper.c						\
+		ft_strcat_and_sleep.c			\
+		free_all_and_print_msgs.c		\
+		thread_manipulation.c			\
+		lock_unlock_semaphors.c			\
+		control_number_of_eats.c
 
 NAME = philo_two
 
@@ -28,11 +28,11 @@ LIBRARY = -pthread
 
 all: $(NAME)
 
-$(NAME) :
-	$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
+$(NAME) : $(SRC)
+	@$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
 
 clean:
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 fclean: clean
 

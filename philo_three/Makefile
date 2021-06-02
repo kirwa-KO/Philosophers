@@ -6,22 +6,20 @@
 #    By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 21:31:15 by ibaali            #+#    #+#              #
-#    Updated: 2020/03/22 15:30:39 by ibaali           ###   ########.fr        #
+#    Updated: 2021/06/02 09:15:05 by ibaali           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = clang
 
-FLAGS = -Wextra -Wall -Werror -g
-FLAGS =
+FLAGS = -Wextra -Wall -Werror
 
-SRC = 	ft_atoi.c 				\
-		ft_itoa.c				\
-		ft_putstr_fd.c			\
-		ft_strcat.c				\
-		helped.c				\
-		philo_three.c			\
-		process_manipulation.c
+SRC = 	main.c						\
+		helper.c					\
+		process_manipulation.c		\
+		ft_strcat_and_sleep.c		\
+		free_all_and_exit.c			\
+		lock_unlock_semaphors.c
 
 NAME = philo_three
 
@@ -29,7 +27,7 @@ LIBRARY = -pthread
 
 all: $(NAME)
 
-$(NAME) :
+$(NAME) : $(SRC)
 	@$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
 
 clean:

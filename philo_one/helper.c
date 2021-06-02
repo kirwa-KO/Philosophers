@@ -1,16 +1,72 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/11 17:36:05 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/07 18:48:55 by ibaali           ###   ########.fr       */
+/*   Created: 2021/05/30 12:20:18 by ibaali            #+#    #+#             */
+/*   Updated: 2021/06/01 09:40:54 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
+
+/*
+ ** this file just contain libft functions that we use it in this project
+*/
+
+int		ft_strlen(char *s)
+{
+	unsigned int lenght;
+
+	lenght = 0;
+	while (s[lenght] != '\0')
+		lenght++;
+	return (lenght);
+}
+
+static	int		ft_sign(char c, int *i)
+{
+	if (c == '-')
+	{
+		*i += 1;
+		return (-1);
+	}
+	if (c == '+')
+	{
+		*i += 1;
+		return (1);
+	}
+	return (1);
+}
+
+int				ft_atoi(const char *str)
+{
+	int		i;
+	long	res;
+	int		sign;
+
+	i = 0;
+	res = 0;
+	sign = 1;
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\r' ||
+			str[i] == '\v' || str[i] == '\f' || str[i] == ' ')
+		i++;
+	sign = ft_sign(str[i], &i);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		if (res >= 922337203685477580 && (str[i] - '0') >= 7)
+		{
+			if (str[i] - '0' >= 8 && sign == -1)
+				return (0);
+			return (-1);
+		}
+		res = res * 10 + (str[i] - '0');
+		i++;
+	}
+	return (sign * (int)res);
+}
 
 static int		nb_size(uint64_t n, uint64_t *nb_ten)
 {
@@ -25,7 +81,7 @@ static int		nb_size(uint64_t n, uint64_t *nb_ten)
 	return (size);
 }
 
-char			*ft_itoa2(uint64_t n)
+char			*ft_itoa(uint64_t n)
 {
 	char		*str;
 	int			i;

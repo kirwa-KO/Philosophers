@@ -1,30 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/11 12:15:59 by ibaali            #+#    #+#             */
-/*   Updated: 2020/03/20 11:45:32 by ibaali           ###   ########.fr       */
+/*   Created: 2021/06/01 11:10:04 by ibaali            #+#    #+#             */
+/*   Updated: 2021/06/01 17:01:07 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int	ft_strlen1(const char *s)
+void		ft_strcat(char *dst, const char *src)
 {
-	unsigned int lenght;
+	int		i;
+	int		j;
 
-	lenght = 0;
-	while (s[lenght] != '\0')
-		lenght++;
-	return (lenght);
+	i = 0;
+	j = 0;
+	if (dst == NULL)
+		return ;
+	while (dst[i] != '\0')
+			i++;
+	while (src[j] != '\0')
+		dst[i++] = src[j++];
+	dst[i] = '\0';
 }
 
-void	ft_putstr_fd2(char *s, int fd)
+void	ft_sleep(uint64_t duration_in_mille_sec)
 {
-	if (s == NULL)
-		return ;
-	write(fd, s, ft_strlen1(s));
+	uint64_t start;
+
+	start = get_time_in_milisecond();
+	usleep(duration_in_mille_sec * 1000 - 20000);
+	while (get_time_in_milisecond() - start < duration_in_mille_sec);
 }

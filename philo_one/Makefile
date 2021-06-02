@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/03/20 13:28:05 by ibaali            #+#    #+#              #
-#    Updated: 2020/03/20 13:28:30 by ibaali           ###   ########.fr        #
+#    Created: 2021/05/30 12:13:31 by ibaali            #+#    #+#              #
+#    Updated: 2021/06/02 09:14:30 by ibaali           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,22 +14,21 @@ CC = clang
 
 FLAGS = -Wextra -Wall -Werror
 
-SRC = 	ft_atoi.c 				\
-		ft_itoa.c				\
-		ft_putstr_fd.c			\
-		ft_strcat.c				\
-		helped.c				\
-		philo_one.c				\
-		thread_manipulation.c
+SRC = 	main.c						\
+		helper.c					\
+		free_all_and_print_msgs.c	\
+		lock_unlock_mutexes.c		\
+		control_number_of_eats.c	\
+		threads_manupilation.c
 
-NAME = philo_one
+NAME =	philo_one
 
 LIBRARY = -pthread
 
 all: $(NAME)
 
-$(NAME) :
-	$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
+$(NAME) : $(SRC)
+	@$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
 
 clean:
 	rm -rf $(NAME)
