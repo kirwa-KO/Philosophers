@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:00:24 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 10:14:40 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 09:36:34 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	t_single_philo_info	*philo;
 	t_all_philos_info	*all_philos;
 
-	selected_philo = *((t_selected_philo*)param);
+	selected_philo = *((t_selected_philo *)param);
 	free(param);
 	all_philos = selected_philo.philos;
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
@@ -82,7 +82,8 @@ void	*die(t_all_philos_info *philos)
  ** initialize the philosophers variabels and run it
 */
 
-static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos, int start)
+static int	initialize_the_thread_and_run_it(t_all_philos_info *philos,
+				int start)
 {
 	t_selected_philo		*selected_philo;
 
@@ -90,17 +91,19 @@ static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos, int star
 	{
 		philos->philosopers[start].id = start;
 		philos->philosopers[start].last_eat = get_time_in_milisecond();
-		philos->philosopers[start].left_fork = (start - 1) % philos->args->nb_of_philos;
+		philos->philosopers[start].left_fork = (start - 1)
+			% philos->args->nb_of_philos;
 		if (philos->philosopers[start].left_fork < 0)
 			philos->philosopers[start].left_fork += philos->args->nb_of_philos;
 		philos->philosopers[start].right_fork = start;
 		philos->philosopers[start].nb_eat = 0;
-		selected_philo = (t_selected_philo*)malloc(sizeof(t_selected_philo));
+		selected_philo = (t_selected_philo *)malloc(sizeof(t_selected_philo));
 		if (!selected_philo)
 			return (-1);
 		selected_philo->id_of_philo = start;
 		selected_philo->philos = philos;
-		if (pthread_create(&(philos->philosopers[start].life), NULL, eat_sleep_think_for_a_philo, selected_philo))
+		if (pthread_create(&(philos->philosopers[start].life), NULL,
+				eat_sleep_think_for_a_philo, selected_philo))
 			return (-1);
 		start += 2;
 	}
@@ -112,15 +115,15 @@ static	int		initialize_the_thread_and_run_it(t_all_philos_info *philos, int star
  ** and check stop simulation
  ** with the die function and philos->must_eat thread
 */
-
-int		create_threads(t_philos_args *args, t_philos_mutex *mutex)
+int	create_threads(t_philos_args *args, t_philos_mutex *mutex)
 {
 	t_all_philos_info		*philos;
 
-	philos = (t_all_philos_info*)malloc(sizeof(t_all_philos_info));
+	philos = (t_all_philos_info *)malloc(sizeof(t_all_philos_info));
 	if (!philos)
 		return (-1);
-	philos->philosopers = (t_single_philo_info*)malloc(sizeof(t_single_philo_info) * args->nb_of_philos);
+	philos->philosopers = (t_single_philo_info *)malloc(
+			sizeof(t_single_philo_info) * args->nb_of_philos);
 	if (!(philos->philosopers))
 		return (-1);
 	philos->args = args;

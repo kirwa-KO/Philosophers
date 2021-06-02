@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helper2.c                                          :+:      :+:    :+:   */
+/*   free_all_and_print_msgs.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:22:38 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 09:37:43 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 09:23:01 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
 
-void		free_all_and_exit(t_all_philos_info *all_philos)
+void	free_all_and_exit(t_all_philos_info *all_philos)
 {
 	int		i;
 
@@ -46,7 +46,7 @@ void	put_str(char *s)
 	write(1, s, ft_strlen(s));
 }
 
-void		msg_print(t_selected_philo *philos_and_selected_id, int state)
+void	msg_print(t_selected_philo *philos_and_selected_id, int state)
 {
 	char	*buffer;
 
@@ -85,9 +85,11 @@ uint64_t	get_time_in_milisecond(void)
 
 void	ft_sleep(uint64_t duration_in_mille_sec)
 {
-	uint64_t start;
+	uint64_t	start;
 
 	start = get_time_in_milisecond();
 	usleep(duration_in_mille_sec * 1000 - 20000);
-	while (get_time_in_milisecond() - start < duration_in_mille_sec);
+	while (get_time_in_milisecond() - start < duration_in_mille_sec)
+	{
+	}
 }

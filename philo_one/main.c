@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 12:13:35 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 10:30:31 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 09:29:14 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
  ** initialize all philosophers informtion
  ** from argv and argc
 */
-
 static	void	init_philosopheres(int argc, char **argv, t_philos_args *args)
 {
 	args->nb_of_philos = ft_atoi(argv[1]);
@@ -27,20 +26,22 @@ static	void	init_philosopheres(int argc, char **argv, t_philos_args *args)
 		args->nb_must_eat = ft_atoi(argv[5]);
 	else
 		args->nb_must_eat = -1;
-
 }
 
 /*
  ** initialize and allocate the mutexes
 */
-
-static	int		init_philo_mutex(t_philos_mutex *mutex, t_philos_args args)
+static	int	init_philo_mutex(t_philos_mutex *mutex, t_philos_args args)
 {
 	int		i;
 
-	if (!(mutex->forks_mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t) * args.nb_of_philos)))
+	mutex->forks_mutex = (pthread_mutex_t *)malloc(
+			sizeof(pthread_mutex_t) * args.nb_of_philos);
+	if (!(mutex->forks_mutex))
 		return (-1);
-	if (!(mutex->eat_mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t) * args.nb_of_philos)))
+	mutex->eat_mutex = (pthread_mutex_t *)malloc(
+			sizeof(pthread_mutex_t) * args.nb_of_philos);
+	if (!(mutex->eat_mutex))
 		return (-1);
 	i = -1;
 	while (++i < args.nb_of_philos)
@@ -57,7 +58,7 @@ static	int		init_philo_mutex(t_philos_mutex *mutex, t_philos_args args)
 	return (0);
 }
 
-int		main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_philos_args		args;
 	t_philos_mutex		mutex;

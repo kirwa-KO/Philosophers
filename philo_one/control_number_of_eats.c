@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 09:44:37 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/01 09:44:57 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/02 09:20:39 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static	void	check_eaten_philos(t_all_philos_info *philos, int *done_eating)
 	}
 }
 
-
 /*
  ** must_eat_control function responsible for stop simulation if a philos
  ** eat number of must eat
@@ -44,8 +43,8 @@ void	*must_eat_control(void *param)
 	int						*done_eating;
 	int						i;
 
-	philos = (t_all_philos_info*)param;
-	done_eating = (int*)malloc(sizeof(int) * philos->args->nb_of_philos);
+	philos = (t_all_philos_info *)param;
+	done_eating = (int *)malloc(sizeof(int) * philos->args->nb_of_philos);
 	if (!done_eating)
 		return (NULL);
 	i = -1;
