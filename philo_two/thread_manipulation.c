@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 10:40:07 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 19:35:58 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/03 07:15:14 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
 	philo->id = selected_philo.id_of_philo;
 	sem_wait(all_philos->sem->door);
-	while (!(all_philos->some_one_died) && (philo->nb_eat < all_philos->args->nb_must_eat || !(all_philos->args->nb_must_eat)))
+	while (!(all_philos->some_one_died)
+		&& (philo->nb_eat < all_philos->args->nb_must_eat
+			|| !(all_philos->args->nb_must_eat)))
 	{
 		lock_forks_and_eat_sems(philo, &selected_philo, all_philos);
 		philo->nb_eat += 1;
@@ -71,16 +73,17 @@ static int	die(t_all_philos_info *philos)
 			selected_philo.id_of_philo = philo->id;
 			selected_philo.philos = philos;
 			sem_wait(philos->sem->eat_sem[philo->id]);
-			if (philos->philosopers[i].nb_eat >= philos->args->nb_must_eat && philos->args->nb_must_eat != 0)
+			if (philos->philosopers[i].nb_eat >= philos->args->nb_must_eat
+				&& philos->args->nb_must_eat != 0)
 				return (PHILO_DONE_EAT);
-
-				
 			time = get_time_in_milisecond();
-			if ((time - philo->last_eat) > philos->args->time_to_die)
+			if ((time - philo->last_eat)
+				> (uint64_t)(philos->args->time_to_die))
 				msg_print(&selected_philo, DIE);
 			sem_post(philos->sem->eat_sem[philo->id]);
 		}
 	}
+	return (0);
 }
 
 /*
@@ -129,9 +132,6 @@ int	create_threads(t_philos_args *args, t_philos_sem *sem)
 	philos->args = args;
 	philos->sem = sem;
 	philos->some_one_died = 0;
-	// if (philos->args->nb_must_eat != -1)
-	// 	if (pthread_create(&(philos->must_eat), NULL, must_eat_control, philos))
-	// 		return (-1);
 	initialize_the_thread_and_run_it(philos);
 	if (die(philos) == PHILO_DONE_EAT)
 	{

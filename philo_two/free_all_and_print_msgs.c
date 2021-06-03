@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:22:38 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 20:02:04 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/03 07:13:07 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	unlink_eat_semaphores(t_all_philos_info *all_philos)
 		ft_strcat(str, SEM_EAT_NAME);
 		number = ft_itoa((uint64_t)i);
 		ft_strcat(str, number);
-		// if (sem_unlink(str) && sem_close(all_philos->sem->eat_sem[i]))
 		if (sem_unlink(str))
 			return (-1);
 		str[0] = 0;
@@ -40,23 +39,12 @@ int	unlink_eat_semaphores(t_all_philos_info *all_philos)
 
 void	free_all_and_exit(t_all_philos_info *all_philos)
 {
-	// int		i;
-
-	// if (pthread_detach(all_philos->must_eat))
-	// 	exit(-1);
-	// i = -1;
-	// while (++i < all_philos->args->nb_of_philos)
-	// 	if (pthread_detach(all_philos->philosopers[i].life))
-	// 		exit (-1);
-	// if (sem_unlink(SEM_FORK_NAME) && sem_close(all_philos->sem->forks_sem))
 	if (sem_unlink(SEM_FORK_NAME))
 		exit (-1);
 	if (unlink_eat_semaphores(all_philos))
 		exit (-1);
-	// if (sem_unlink(SEM_PRINT_NAME) && sem_close(all_philos->sem->print_sem))
 	if (sem_unlink(SEM_PRINT_NAME))
 		exit (-1);
-	// if (sem_unlink(SEM_DOOR_NAME) && sem_close(all_philos->sem->door))
 	if (sem_unlink(SEM_DOOR_NAME))
 		exit (-1);
 	free(all_philos->sem->eat_sem);
