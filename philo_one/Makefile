@@ -6,7 +6,7 @@
 #    By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/30 12:13:31 by ibaali            #+#    #+#              #
-#    Updated: 2021/06/02 18:07:07 by ibaali           ###   ########.fr        #
+#    Updated: 2021/06/03 06:56:00 by ibaali           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ SRC = 	main.c						\
 		helper.c					\
 		free_all_and_print_msgs.c	\
 		lock_unlock_mutexes.c		\
-		control_number_of_eats.c	\
 		threads_manupilation.c
 
 NAME =	philo_one
@@ -28,8 +27,7 @@ LIBRARY = -pthread
 all: $(NAME)
 
 $(NAME) : $(SRC)
-	@#$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
-	@$(CC) $(SRC) $(LIBRARY) -o $(NAME)
+	@$(CC) $(FLAGS) $(SRC) $(LIBRARY) -o $(NAME)
 
 clean:
 	rm -rf $(NAME)

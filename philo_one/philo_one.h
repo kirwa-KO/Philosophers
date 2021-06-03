@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 12:13:37 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 18:45:28 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/03 06:56:14 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@
 typedef struct s_philos_args
 {
 	int						nb_of_philos;
-	int						time_to_die;
-	int						time_to_eat;
-	int						time_to_sleep;
+	long long				time_to_die;
+	long long				time_to_eat;
+	long long				time_to_sleep;
 	int						nb_must_eat;
 }					t_philos_args;
 
@@ -56,7 +56,6 @@ typedef struct s_all_philos_info
 {
 	t_philos_args			*args;
 	t_philos_mutex			*mutex;
-	// pthread_t				must_eat;
 	t_single_philo_info		*philosopers;
 	int						some_one_died;
 }					t_all_philos_info;

@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 15:00:24 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 18:51:33 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/03 07:09:11 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
 	philo->id = selected_philo.id_of_philo;
 	pthread_mutex_lock(&(all_philos->mutex->door));
-	while (!(all_philos->some_one_died) && (philo->nb_eat < all_philos->args->nb_must_eat || !(all_philos->args->nb_must_eat)))
+	while (!(all_philos->some_one_died)
+		&& (philo->nb_eat < all_philos->args->nb_must_eat
+			|| !(all_philos->args->nb_must_eat)))
 	{
 		lock_forks_and_eat_mutexs(philo, &selected_philo, all_philos);
 		philo->nb_eat += 1;
@@ -46,6 +48,22 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	return (NULL);
 }
 
+static void	die_checker(t_all_philos_info *philos, t_single_philo_info *philo)
+{
+	uint64_t				time;
+	t_selected_philo		selected_philo2;
+
+	selected_philo2.id_of_philo = philo->id;
+	selected_philo2.philos = philos;
+	time = get_time_in_milisecond();
+	if ((time - philo->last_eat)
+		> (uint64_t)(philos->args->time_to_die))
+	{
+		philos->some_one_died = 1;
+		msg_print(&selected_philo2, DIE);
+	}
+}
+
 /*
  ** die function responsible for stop simulation if a philo die
  ** get every philo and get her last eat time and compare it with
@@ -54,11 +72,9 @@ void	*eat_sleep_think_for_a_philo(void *param)
  ** and make exit
  ** make the free and exit when call msg_print functino with DIE key
 */
-int	die(t_all_philos_info *philos)
+static int	die(t_all_philos_info *philos)
 {
 	t_single_philo_info		*philo;
-	t_selected_philo		selected_philo2;
-	uint64_t				time;
 	int						i;
 
 	while (1)
@@ -67,20 +83,15 @@ int	die(t_all_philos_info *philos)
 		while (++i < philos->args->nb_of_philos)
 		{
 			philo = &(philos->philosopers[i]);
-			selected_philo2.id_of_philo = philo->id;
-			selected_philo2.philos = philos;
 			pthread_mutex_lock(&(philos->mutex->eat_mutex[philo->id]));
-			if (philos->philosopers[i].nb_eat >= philos->args->nb_must_eat && philos->args->nb_must_eat != 0)
+			if (philos->philosopers[i].nb_eat >= philos->args->nb_must_eat
+				&& philos->args->nb_must_eat != 0)
 				return (PHILO_DONE_EAT);
-			time = get_time_in_milisecond();
-			if ((time - philo->last_eat) > philos->args->time_to_die)
-			{
-				philos->some_one_died = 1;
-				msg_print(&selected_philo2, DIE);
-			}
+			die_checker(philos, philo);
 			pthread_mutex_unlock(&(philos->mutex->eat_mutex[philo->id]));
 		}
 	}
+	return (0);
 }
 
 /*
