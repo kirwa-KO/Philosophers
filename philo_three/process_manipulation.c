@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 14:31:39 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 20:11:24 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/03 07:47:25 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	*eat_sleep_think_for_a_philo(void *param)
 {
 	t_selected_philo	selected_philo;
-	// uint64_t			time;
 	t_single_philo_info	*philo;
 	t_all_philos_info	*all_philos;
 
@@ -24,21 +23,9 @@ void	*eat_sleep_think_for_a_philo(void *param)
 	all_philos = selected_philo.philos;
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
 	philo->id = selected_philo.id_of_philo;
-	// while (1)
-	// {
-	// 	sem_wait(all_philos->sem->eat_sem[philo->id]);
-	// 	time = get_time_in_milisecond();
-	// 	if ((time - philo->last_eat) > all_philos->args->time_to_die)
-	// 		msg_print(&selected_philo, DIE);
-	// 	if (all_philos->args->nb_must_eat != -1)
-	// 		if (philo->nb_eat >= all_philos->args->nb_must_eat)
-	// 			exit(EXIT_BY_FINISH_NB_EAT);
-	// 	sem_post(all_philos->sem->eat_sem[philo->id]);
-	// }
-
 	sem_wait(all_philos->sem->door);
-	// while (1)
-	while ((philo->nb_eat < all_philos->args->nb_must_eat || !(all_philos->args->nb_must_eat)))
+	while ((philo->nb_eat < all_philos->args->nb_must_eat
+			|| !(all_philos->args->nb_must_eat)))
 	{
 		lock_forks_and_eat_sems(philo, &selected_philo, all_philos);
 		philo->nb_eat += 1;
@@ -58,41 +45,25 @@ static void	*run_philosophers_and_check_die(void *param)
 	t_selected_philo	selected_philo;
 	t_single_philo_info	*philo;
 	t_all_philos_info	*all_philos;
+	uint64_t			time;
 
 	selected_philo = *((t_selected_philo *)param);
 	all_philos = selected_philo.philos;
 	philo = &(selected_philo.philos->philosopers[selected_philo.id_of_philo]);
 	philo->id = selected_philo.id_of_philo;
-	
-	if (pthread_create(&(philo->life), NULL, eat_sleep_think_for_a_philo, param))
+	if (pthread_create(&(philo->life), NULL,
+			eat_sleep_think_for_a_philo, param))
 		return (NULL);
-	// sem_wait(all_philos->sem->door);
-	// while (1)
-	// {
-	// 	lock_forks_and_eat_sems(philo, &selected_philo, all_philos);
-	// 	philo->nb_eat += 1;
-	// 	philo->last_eat = get_time_in_milisecond();
-	// 	ft_sleep(all_philos->args->time_to_eat);
-	// 	msg_print(&selected_philo, SLEEPING);
-	// 	unlock_forks_and_eat_sems(philo, all_philos);
-	// 	ft_sleep(all_philos->args->time_to_sleep);
-	// 	msg_print(&selected_philo, THINKING);
-	// }
-	uint64_t			time;
-
 	while (1)
 	{
 		sem_wait(all_philos->sem->eat_sem[philo->id]);
 		time = get_time_in_milisecond();
-		if ((time - philo->last_eat) > all_philos->args->time_to_die)
+		if ((time - philo->last_eat)
+			> (uint64_t)(all_philos->args->time_to_die))
 			msg_print(&selected_philo, DIE);
-		// if (all_philos->args->nb_must_eat != -1)
-		// 	if (philo->nb_eat >= all_philos->args->nb_must_eat)
-				// exit(EXIT_BY_FINISH_NB_EAT);
 		sem_post(all_philos->sem->eat_sem[philo->id]);
 		usleep(10);
 	}
-
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ibaali <ibaali@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 14:23:44 by ibaali            #+#    #+#             */
-/*   Updated: 2021/06/02 20:07:08 by ibaali           ###   ########.fr       */
+/*   Updated: 2021/06/03 07:43:40 by ibaali           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static	int	init_philosopheres(int argc, char **argv, t_philos_args *args)
 	{
 		args->nb_must_eat = ft_atoi(argv[5]);
 		if (args->nb_must_eat <= 0)
-			return -1;
+			return (-1);
 	}
 	else
 		args->nb_must_eat = 0;
@@ -94,8 +94,6 @@ int	main(int argc, char **argv)
 {
 	t_philos_args		args;
 	t_philos_sem		sem;
-
-	g_time = get_time_in_milisecond();
 
 	if (argc != 6 && argc != 5)
 	{
